@@ -585,13 +585,59 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
    size_t size;
    int t;
 
+   ptx_reg_t faultedData;
+
    type_info_key::type_decode(type,size,t);
+
+   switch ( type ) {
+    case S8_TYPE:
+    case U8_TYPE:
+    case B8_TYPE:
+        // TODO: Flip bits.
+        faultedData.s8 = data.s8;
+        break;
+    case S16_TYPE:
+    case U16_TYPE:
+    case B16_TYPE:
+    case F16_TYPE:
+        // TODO: Flip bits.
+        faultedData.s16 = data.s16;
+        break;
+    case S32_TYPE:
+    case U32_TYPE:
+    case B32_TYPE:
+    case F32_TYPE:
+        // TODO: Flip bits.
+        faultedData.s32 = data.s32;
+        break;
+    case S64_TYPE:
+    case U64_TYPE:
+    case B64_TYPE:
+    case F64_TYPE:
+    case BB64_TYPE:
+    case FF64_TYPE:
+        // TODO: Flip bits.
+        faultedData.s64 = data.s64;
+        break;
+    case BB128_TYPE:
+        // TODO: Flip bits.
+        faultedData.lowest = data.lowest;
+        faultedData.low = data.low;
+        faultedData.high = data.high;
+        faultedData.highest = data.highest;
+        break;
+    case PRED_TYPE:
+        // TODO: Flip bits.
+        faultedData.pred = data.pred;
+        break;
+    default: assert(0); break;
+    }
 
    /*complete this section for other cases*/
    if(dst.get_addr_space() == undefined_space)
    {
       ptx_reg_t setValue;
-      setValue.u64 = data.u64;
+      setValue.u64 = faultedData.u64;
 
       // Double destination in set instruction ($p0|$p1) - second is negation of first
       if (dst.get_double_operand_type() == -1)
@@ -687,11 +733,11 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
           if(dst.get_operand_lohi() == 1)
           {
-              setValue.u64 = ((m_regs.back()[ regName ].u64) & (~(0xFFFF))) + (data.u64 & 0xFFFF);
+              setValue.u64 = ((m_regs.back()[ regName ].u64) & (~(0xFFFF))) + (faultedData.u64 & 0xFFFF);
           }
           else if(dst.get_operand_lohi() == 2)
           {
-              setValue.u64 = ((m_regs.back()[ regName ].u64) & (~(0xFFFF0000))) + ((data.u64<<16) & 0xFFFF0000);
+              setValue.u64 = ((m_regs.back()[ regName ].u64) & (~(0xFFFF0000))) + ((faultedData.u64<<16) & 0xFFFF0000);
           }
 
           set_reg(predName,predValue);
@@ -705,10 +751,10 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
           setValue2.u64 = 0;
           setValue3.u64 = 0;
           setValue4.u64 = 0;
-          setValue.u32 = data.u128.lowest;
-          setValue2.u32 = data.u128.low;
-          setValue3.u32 = data.u128.high;
-          setValue4.u32 = data.u128.highest;
+          setValue.u32 = faultedData.u128.lowest;
+          setValue2.u32 = faultedData.u128.low;
+          setValue3.u32 = faultedData.u128.high;
+          setValue4.u32 = faultedData.u128.highest;
 
           const symbol *name1, *name2, *name3, *name4 = NULL;
 
@@ -729,8 +775,8 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
           setValue.u32 = 0;
           setValue2.u32 = 0;
 
-          setValue.u32 = data.bits.ls;
-          setValue2.u32 = data.bits.ms;
+          setValue.u32 = faultedData.bits.ls;
+          setValue2.u32 = faultedData.bits.ms;
 
           const symbol *name1, *name2 = NULL;
 
@@ -744,11 +790,11 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       {
           if(dst.get_operand_lohi() == 1)
           {
-              setValue.u64 = ((m_regs.back()[ dst.get_symbol() ].u64) & (~(0xFFFF))) + (data.u64 & 0xFFFF);
+              setValue.u64 = ((m_regs.back()[ dst.get_symbol() ].u64) & (~(0xFFFF))) + (faultedData.u64 & 0xFFFF);
           }
           else if(dst.get_operand_lohi() == 2)
           {
-              setValue.u64 = ((m_regs.back()[ dst.get_symbol() ].u64) & (~(0xFFFF0000))) + ((data.u64<<16) & 0xFFFF0000);
+              setValue.u64 = ((m_regs.back()[ dst.get_symbol() ].u64) & (~(0xFFFF0000))) + ((faultedData.u64<<16) & 0xFFFF0000);
           }
           set_reg(dst.get_symbol(),setValue);
       }
@@ -761,7 +807,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
        mem = thread->get_global_memory();
        type_info_key::type_decode(type,size,t);
 
-       mem->write(dstData.u32,size/8,&data.u128,thread,pI);
+       mem->write(dstData.u32,size/8,&faultedData.u128,thread,pI);
        thread->m_last_effective_address = dstData.u32;
        thread->m_last_memory_space = global_space;
    }
@@ -773,7 +819,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
        mem = thread->m_shared_mem;
        type_info_key::type_decode(type,size,t);
 
-       mem->write(dstData.u32,size/8,&data.u128,thread,pI);
+       mem->write(dstData.u32,size/8,&faultedData.u128,thread,pI);
        thread->m_last_effective_address = dstData.u32;
        thread->m_last_memory_space = shared_space;
    }
@@ -785,7 +831,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
        mem = thread->m_local_mem;
        type_info_key::type_decode(type,size,t);
 
-       mem->write(dstData.u32,size/8,&data.u128,thread,pI);
+       mem->write(dstData.u32,size/8,&faultedData.u128,thread,pI);
        thread->m_last_effective_address = dstData.u32;
        thread->m_last_memory_space = local_space;
    }

@@ -621,10 +621,10 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
         break;
     case BB128_TYPE:
         // TODO: Flip bits.
-        faultedData.u128.lowest = data.lowest;
-        faultedData.u128.low = data.low;
-        faultedData.u128.high = data.high;
-        faultedData.u128.highest = data.highest;
+        faultedData.u128.lowest = data.u128.lowest;
+        faultedData.u128.low = data.u128.low;
+        faultedData.u128.high = data.u128.high;
+        faultedData.u128.highest = data.u128.highest;
         break;
     case PRED_TYPE:
         // TODO: Flip bits.

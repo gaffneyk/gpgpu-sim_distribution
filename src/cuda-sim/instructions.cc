@@ -589,47 +589,96 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
    type_info_key::type_decode(type,size,t);
 
+  std::default_random_engine generator;
+  std::uniform_real_distribution<double> distribution(0.0,1.0);
+  double number = distribution(generator);
+  bool fault = number < 0.1;
+
    switch ( type ) {
     case S8_TYPE:
     case U8_TYPE:
-    case B8_TYPE:
-        // TODO: Flip bits.
-        faultedData.s8 = data.s8;
-        break;
+    case B8_TYPE: {
+      faultedData.s8 = data.s8;
+      if (fault) {
+        std::uniform_int_distribution<int> un_distribution(0, 7);
+        int bit = un_distribution(generator);
+        faultedData.s8 ^= 1UL << bit;
+      }
+      break;
+    }
+        
     case S16_TYPE:
     case U16_TYPE:
     case B16_TYPE:
-    case F16_TYPE:
-        // TODO: Flip bits.
-        faultedData.s16 = data.s16;
-        break;
+    case F16_TYPE: {
+      faultedData.s16 = data.s16;
+      if (fault) {
+        std::uniform_int_distribution<int> un_distribution(0, 15);
+        int bit = un_distribution(generator);
+        faultedData.s16 ^= 1UL << bit;
+      }
+      break;
+    }
+        
     case S32_TYPE:
     case U32_TYPE:
     case B32_TYPE:
-    case F32_TYPE:
-        // TODO: Flip bits.
-        faultedData.s32 = data.s32;
-        break;
+    case F32_TYPE: {
+      faultedData.s32 = data.s32;
+      if (fault) {
+        std::uniform_int_distribution<int> un_distribution(0, 31);
+        int bit = un_distribution(generator);
+        faultedData.s32 ^= 1UL << bit;
+      }
+      break;
+    }
+        
     case S64_TYPE:
     case U64_TYPE:
     case B64_TYPE:
     case F64_TYPE:
     case BB64_TYPE:
-    case FF64_TYPE:
-        // TODO: Flip bits.
-        faultedData.s64 = data.s64;
-        break;
-    case BB128_TYPE:
-        // TODO: Flip bits.
-        faultedData.u128.lowest = data.u128.lowest;
-        faultedData.u128.low = data.u128.low;
-        faultedData.u128.high = data.u128.high;
-        faultedData.u128.highest = data.u128.highest;
-        break;
-    case PRED_TYPE:
-        // TODO: Flip bits.
-        faultedData.pred = data.pred;
-        break;
+    case FF64_TYPE: {
+      faultedData.s64 = data.s64;
+      if (fault) {
+        std::uniform_int_distribution<int> un_distribution(0, 63);
+        int bit = un_distribution(generator);
+        faultedData.s64 ^= 1UL << bit;
+      }
+      break;
+    }
+        
+    case BB128_TYPE: {
+      faultedData.u128.lowest = data.u128.lowest;
+      faultedData.u128.low = data.u128.low;
+      faultedData.u128.high = data.u128.high;
+      faultedData.u128.highest = data.u128.highest;
+      if (fault) {
+        std::uniform_int_distribution<int> un_distribution(0, 127);
+        int bit = un_distribution(generator);
+        if (bit < 32) {
+          faultedData.u128.lowest ^= 1UL << bit % 32;
+        } else if (bit < 64) {
+          faultedData.u128.low ^= 1UL << bit % 32;
+        } else if (bit < 96) {
+          faultedData.u128.high ^= 1UL << bit % 32;
+        } else {
+          faultedData.u128.highest ^= 1UL << bit % 32;
+        }
+      }
+      break;
+    }
+        
+    case PRED_TYPE: {
+      faultedData.pred = data.pred;
+      if (fault) {
+        std::uniform_int_distribution<int> un_distribution(0, 3);
+        int bit = un_distribution(generator);
+        faultedData.pred ^= 1UL << bit;
+      }
+      break;
+    }
+        
     default: assert(0); break;
     }
 

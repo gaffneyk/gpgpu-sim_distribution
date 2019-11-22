@@ -590,11 +590,15 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
    type_info_key::type_decode(type,size,t);
 
   std::default_random_engine generator;
-  std::uniform_real_distribution<double> distribution(0.0,1.0);
+  std::uniform_real_distribution<double> distribution(0.0, 1.0);
   std::uniform_int_distribution<int> un_distribution(0, 127);
   double number = distribution(generator);
   int bit = un_distribution(generator);
   bool fault = number < 0.1;
+
+  if (fault) {
+    printf("fault generated\n");
+  }
 
    switch ( type ) {
     case S8_TYPE:

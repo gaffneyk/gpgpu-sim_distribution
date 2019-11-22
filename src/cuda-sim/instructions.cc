@@ -596,6 +596,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   int bit = un_distribution(generator);
   bool fault = number < 0.1;
 
+  printf("set_operand_value\n");
   if (fault) {
     printf("fault generated\n");
   }

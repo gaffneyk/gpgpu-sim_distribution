@@ -578,6 +578,8 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
 }
 
+void log_fault()
+
 void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_t &data, unsigned type, ptx_thread_info *thread, const ptx_instruction *pI )
 {
    ptx_reg_t dstData;
@@ -591,7 +593,9 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
   std::default_random_engine generator;
   std::uniform_real_distribution<double> distribution(0.0,1.0);
+  std::uniform_int_distribution<int> un_distribution(0, 127);
   double number = distribution(generator);
+  int bit = un_distribution(generator);
   bool fault = number < 0.1;
 
    switch ( type ) {
@@ -600,9 +604,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
     case B8_TYPE: {
       faultedData.s8 = data.s8;
       if (fault) {
-        std::uniform_int_distribution<int> un_distribution(0, 7);
-        int bit = un_distribution(generator);
-        faultedData.s8 ^= 1UL << bit;
+        faultedData.s8 ^= 1UL << bit % 8;
       }
       break;
     }
@@ -613,9 +615,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
     case F16_TYPE: {
       faultedData.s16 = data.s16;
       if (fault) {
-        std::uniform_int_distribution<int> un_distribution(0, 15);
-        int bit = un_distribution(generator);
-        faultedData.s16 ^= 1UL << bit;
+        faultedData.s16 ^= 1UL << bit % 16;
       }
       break;
     }
@@ -626,9 +626,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
     case F32_TYPE: {
       faultedData.s32 = data.s32;
       if (fault) {
-        std::uniform_int_distribution<int> un_distribution(0, 31);
-        int bit = un_distribution(generator);
-        faultedData.s32 ^= 1UL << bit;
+        faultedData.s32 ^= 1UL << bit % 32;
       }
       break;
     }
@@ -641,9 +639,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
     case FF64_TYPE: {
       faultedData.s64 = data.s64;
       if (fault) {
-        std::uniform_int_distribution<int> un_distribution(0, 63);
-        int bit = un_distribution(generator);
-        faultedData.s64 ^= 1UL << bit;
+        faultedData.s64 ^= 1UL << bit % 64;
       }
       break;
     }
@@ -654,8 +650,6 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       faultedData.u128.high = data.u128.high;
       faultedData.u128.highest = data.u128.highest;
       if (fault) {
-        std::uniform_int_distribution<int> un_distribution(0, 127);
-        int bit = un_distribution(generator);
         if (bit < 32) {
           faultedData.u128.lowest ^= 1UL << bit % 32;
         } else if (bit < 64) {
@@ -672,9 +666,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
     case PRED_TYPE: {
       faultedData.pred = data.pred;
       if (fault) {
-        std::uniform_int_distribution<int> un_distribution(0, 3);
-        int bit = un_distribution(generator);
-        faultedData.pred ^= 1UL << bit;
+        faultedData.pred ^= 1UL << bit % 4;
       }
       break;
     }

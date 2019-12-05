@@ -596,10 +596,6 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   int bit = bit_distribution(generator);
   bool fault = fault_n < 10;
 
-  if (fault) {
-    printf("fault generated\n");
-  }
-
    switch ( type ) {
     case S8_TYPE:
     case U8_TYPE:

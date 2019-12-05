@@ -517,7 +517,7 @@ private:
    std::stack<class operand_info, std::vector<operand_info> > m_breakaddrs;
 
    // CS 758
-   ptx_instruction *last_instruction;
+   const ptx_instruction *last_instruction;
    unsigned int redundant_instructions_executed;
    unsigned int redundancy;
 };

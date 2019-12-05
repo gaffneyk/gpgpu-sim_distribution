@@ -1531,6 +1531,8 @@ int tensorcore_op(int inst_opcode){
 }
 void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
 {
+
+   inst.print_insn(stdout);
     
    bool skip = false;
    int op_classification = 0;

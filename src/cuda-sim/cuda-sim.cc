@@ -885,7 +885,7 @@ void ptx_instruction::set_opcode_and_latency()
 
 }
 
-void ptx_thread_info::ptx_fetch_inst( inst_t &inst ) const
+void ptx_thread_info::ptx_fetch_inst( inst_t &inst )
 {
    // CS 758
    if (redundant_instructions_executed++ == redundancy) {

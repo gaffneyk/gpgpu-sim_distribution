@@ -887,20 +887,10 @@ void ptx_instruction::set_opcode_and_latency()
 
 void ptx_thread_info::ptx_fetch_inst( inst_t &inst )
 {
-   // CS 758
-   if (redundant_instructions_executed++ == redundancy) {
-      addr_t pc = get_pc();
-      const ptx_instruction *pI = m_func_info->get_instruction(pc);
-      inst = (const inst_t&)*pI;
-      assert( inst.valid() );
-
-      redundant_instructions_executed = 0;
-      last_instruction = pI;
-   } else {
-      inst = (const inst_t &)*last_instruction;
-   }
-
-   inst.print_insn(stdout);
+   addr_t pc = get_pc();
+   const ptx_instruction *pI = m_func_info->get_instruction(pc);
+   inst = (const inst_t&)*pI;
+   assert( inst.valid() );
 }
 
 static unsigned datatype2size( unsigned data_type )
@@ -1696,7 +1686,11 @@ void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
       if ( ptx_debug_exec_dump_cond<10>(get_uid(), pc) )
          dump_regs(stdout);
    }
-   update_pc();
+   if (redundant_instructions_executed++ == redundancy) {
+      update_pc();
+      redundant_instructions_executed = 0;
+   }
+   
    g_ptx_sim_num_insn++;
    
    //not using it with functional simulation mode

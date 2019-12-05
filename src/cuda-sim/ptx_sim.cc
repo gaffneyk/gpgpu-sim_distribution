@@ -213,9 +213,8 @@ ptx_thread_info::ptx_thread_info( kernel_info_t &kernel )
    m_last_set_operand_value=ptx_reg_t();
 
    // CS 758
-   last_instruction = NULL;
+   redundant_instructions_executed = 0;
    redundancy = 1;
-   redundant_instructions_executed = redundancy;
 }
 
 const ptx_version &ptx_thread_info::get_ptx_version() const 

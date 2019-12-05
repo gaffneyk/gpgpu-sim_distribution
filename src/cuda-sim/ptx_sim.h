@@ -515,6 +515,11 @@ private:
    bool m_enable_debug_trace;
 
    std::stack<class operand_info, std::vector<operand_info> > m_breakaddrs;
+
+   // CS 758
+   ptx_instruction *last_instruction;
+   unsigned int redundant_instructions_executed;
+   unsigned int redundancy;
 };
 
 addr_t generic_to_local( unsigned smid, unsigned hwtid, addr_t addr );

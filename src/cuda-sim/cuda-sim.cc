@@ -1742,7 +1742,10 @@ void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
       printf("GPGPU-Sim PTX:       '%s'\n", pI->get_source() );
       abort();
    }
-      
+
+   if (m_icount % 100 == 0) {
+      write_checkpoint();
+   }
 }
 
 void set_param_gpgpu_num_shaders(int num_shaders)

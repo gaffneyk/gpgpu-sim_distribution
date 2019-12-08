@@ -705,9 +705,9 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
   if (fault_detected) {
     std::cout << "Fault detected!" << std::endl;
-    std::unordered_map<std::pair<unsigned int, unsigned int>, int> counts;
+    std::unordered_map<std::string, int> counts;
     for (auto &data_a : temp_registers) {
-      counts[std::make_pair(data_a.bits.ls, data_a.bits.ms)] += 1;
+      counts[std::to_string(data_a.bits.ls) + std::to_string(data_a.bits.ms)] += 1;
     }
   }
 

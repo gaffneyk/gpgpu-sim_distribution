@@ -580,6 +580,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
 void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_t &data, unsigned type, ptx_thread_info *thread, const ptx_instruction *pI )
 {
+  std::cout << "Writing to register file (dst: " << dst.name() << ")." << std::endl;
    ptx_reg_t dstData;
    memory_space *mem = NULL;
    size_t size;

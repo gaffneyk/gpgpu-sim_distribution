@@ -583,6 +583,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   std::cout << "Thread hardware id: " << thread->get_hw_tid() << std::endl;
   std::cout << "Instruction: " << pI->to_string() << std::endl;
   std::cout << "Redundant instructions executed: " << redundant_instructions_executed << std::endl;
+
    ptx_reg_t dstData;
    memory_space *mem = NULL;
    size_t size;
@@ -685,6 +686,21 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
         
     default: assert(0); break;
     }
+
+  temp_registers[redundant_instructions_executed] = faultedData;
+
+  if (redundant_instructions_executed < redundancy) {  
+    return;
+  }
+
+  bool fault_detected = false;
+  for (const auto &data_a : temp_registers) {
+    for (const auto &data_b : temp_registers) {
+      if (data_a != data_b) {
+        std::cout << "Fault detected!" << std::endl;
+      }
+    }
+  }
 
    /*complete this section for other cases*/
    if(dst.get_addr_space() == undefined_space)

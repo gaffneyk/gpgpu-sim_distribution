@@ -214,7 +214,8 @@ ptx_thread_info::ptx_thread_info( kernel_info_t &kernel )
 
    // CS 758
    redundancy = 1;
-   redundant_instructions_executed = redundancy;
+   redundant_instructions_executed = 0;
+   temp_registers = std::vector<ptx_reg_t>(redundancy + 1);
 }
 
 const ptx_version &ptx_thread_info::get_ptx_version() const 

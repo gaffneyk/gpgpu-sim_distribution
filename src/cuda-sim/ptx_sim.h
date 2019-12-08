@@ -475,6 +475,7 @@ public:
    // CS 758
    unsigned int redundant_instructions_executed;
    unsigned int redundancy;
+   std::vector<ptx_reg_t> temp_registers;
 
 private:
 

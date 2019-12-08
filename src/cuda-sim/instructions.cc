@@ -702,7 +702,9 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
     }
   }
 
-  std::cout << "Fault detected!" << std::endl;
+  if (fault_detected) {
+    std::cout << "Fault detected!" << std::endl;
+  }
 
    /*complete this section for other cases*/
    if(dst.get_addr_space() == undefined_space)

@@ -580,8 +580,9 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
 void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_t &data, unsigned type, ptx_thread_info *thread, const ptx_instruction *pI )
 {
+  std::cout << "Thread hardware id: " << thread->get_hw_tid() << std::endl;
   std::cout << "Instruction: " << pI->to_string() << std::endl;
-  std::cout << "Writing to register file: " << dst.name() << ")." << std::endl;
+  std::cout << "Writing to register file: " << dst.name() << std::endl;
    ptx_reg_t dstData;
    memory_space *mem = NULL;
    size_t size;
@@ -600,7 +601,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   bool fault = fault_n < 0.01;
 
   if (fault) {
-    std::cout << "Fault generated." << std::endl;
+    std::cout << "Fault generated" << std::endl;
   }
 
    switch ( type ) {
@@ -610,7 +611,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       faultedData.s8 = data.s8;
       if (fault) {
         faultedData.s8 ^= 1UL << bit % 8;
-        std::cout << "Bit " << bit % 8 << " flipped." << std::endl;
+        std::cout << "Bit " << bit % 8 << " flipped" << std::endl;
       }
       break;
     }
@@ -622,7 +623,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       faultedData.s16 = data.s16;
       if (fault) {
         faultedData.s16 ^= 1UL << bit % 16;
-        std::cout << "Bit " << bit % 16 << " flipped." << std::endl;
+        std::cout << "Bit " << bit % 16 << " flipped" << std::endl;
       }
       break;
     }
@@ -634,7 +635,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       faultedData.s32 = data.s32;
       if (fault) {
         faultedData.s32 ^= 1UL << bit % 32;
-        std::cout << "Bit " << bit % 32 << " flipped." << std::endl;
+        std::cout << "Bit " << bit % 32 << " flipped" << std::endl;
       }
       break;
     }
@@ -648,7 +649,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       faultedData.s64 = data.s64;
       if (fault) {
         faultedData.s64 ^= 1UL << bit % 64;
-        std::cout << "Bit " << bit % 64 << " flipped." << std::endl;
+        std::cout << "Bit " << bit % 64 << " flipped" << std::endl;
       }
       break;
     }
@@ -668,7 +669,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
         } else {
           faultedData.u128.highest ^= 1UL << bit % 32;
         }
-        std::cout << "Bit " << bit << " flipped." << std::endl;
+        std::cout << "Bit " << bit << " flipped" << std::endl;
       }
       break;
     }
@@ -677,7 +678,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       faultedData.pred = data.pred;
       if (fault) {
         faultedData.pred ^= 1UL << bit % 4;
-        std::cout << "Bit " << bit % 4 << " flipped." << std::endl;
+        std::cout << "Bit " << bit % 4 << " flipped" << std::endl;
       }
       break;
     }

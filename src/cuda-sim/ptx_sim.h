@@ -472,6 +472,10 @@ public:
    ptx_cta_info   *m_cta_info;
    ptx_reg_t m_last_set_operand_value;
 
+   // CS 758
+   unsigned int redundant_instructions_executed;
+   unsigned int redundancy;
+
 private:
 
    bool m_functionalSimulationMode; 

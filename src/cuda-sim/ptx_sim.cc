@@ -211,6 +211,10 @@ ptx_thread_info::ptx_thread_info( kernel_info_t &kernel )
    m_local_mem_stack_pointer = 0;
    m_gpu = NULL;
    m_last_set_operand_value=ptx_reg_t();
+
+   // CS 758
+   redundancy = 1
+   redundant_instructions_executed = redundancy;
 }
 
 const ptx_version &ptx_thread_info::get_ptx_version() const 

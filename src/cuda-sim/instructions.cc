@@ -49,6 +49,7 @@
 #include <string>
 #include <map>
 #include <stdlib.h>
+#include <unordered_map>
 
 //Jin: include device runtime for CDP
 #include "cuda_device_runtime.h"

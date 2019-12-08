@@ -694,8 +694,8 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   }
 
   bool fault_detected = false;
-  for (const auto &data_a : temp_registers) {
-    for (const auto &data_b : temp_registers) {
+  for (auto &data_a : temp_registers) {
+    for (auto &data_b : temp_registers) {
       if (data_a != data_b) {
         std::cout << "Fault detected!" << std::endl;
       }

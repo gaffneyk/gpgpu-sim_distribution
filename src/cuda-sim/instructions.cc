@@ -704,10 +704,27 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   }
 
   if (fault_detected) {
-    std::cout << "Fault detected!" << std::endl;
+    std::cout << "Error detected!" << std::endl;
+
     std::unordered_map<std::string, int> counts;
+    ptx_reg_t plurality;
+    int plurality_count = 0;
+
     for (auto &data_a : temp_registers) {
-      counts[std::to_string(data_a.bits.ls) + std::to_string(data_a.bits.ms)] += 1;
+      std::string key = std::to_string(data_a.bits.ls) + std::to_string(data_a.bits.ms);
+      counts[key] += 1;
+
+      if (counts[key] > plurality_count) {
+        plurality = data_a;
+        plurality_count = counts[key];
+      }
+    }
+
+    if (plurality_count > 1) {
+      std::cout << "Found plurality, resolving error" << std::endl;
+      faultedData = plurality;
+    } else {
+      std::cout << "No plurality, could not resolve error" << std::endl;
     }
   }
 

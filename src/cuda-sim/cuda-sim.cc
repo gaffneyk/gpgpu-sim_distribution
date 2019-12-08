@@ -1743,7 +1743,7 @@ void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
       abort();
    }
 
-   if (m_icount % 100 == 0) {
+   if (m_icount % 10 == 0) {
       write_checkpoint();
    }
 }

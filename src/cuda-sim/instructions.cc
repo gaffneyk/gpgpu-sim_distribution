@@ -697,10 +697,12 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   for (auto &data_a : temp_registers) {
     for (auto &data_b : temp_registers) {
       if (data_a.bits.ls != data_b.bits.ls || data_a.bits.ms != data_b.bits.ms) {
-        std::cout << "Fault detected!" << std::endl;
+        fault_detected = true;
       }
     }
   }
+
+  std::cout << "Fault detected!" << std::endl;
 
    /*complete this section for other cases*/
    if(dst.get_addr_space() == undefined_space)

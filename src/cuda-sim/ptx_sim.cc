@@ -213,7 +213,7 @@ ptx_thread_info::ptx_thread_info( kernel_info_t &kernel )
    m_last_set_operand_value=ptx_reg_t();
 
    // CS 758
-   redundancy = 1;
+   redundancy = 2;
    redundant_instructions_executed = 0;
    temp_registers = std::vector<ptx_reg_t>(redundancy + 1);
 }

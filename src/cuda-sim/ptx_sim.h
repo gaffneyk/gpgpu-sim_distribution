@@ -460,6 +460,9 @@ public:
    //Jin: get corresponding kernel grid for CDP purpose
    kernel_info_t & get_kernel() { return m_kernel; }
 
+   void write_checkpoint();
+   void load_checkpoint();
+
 public:
    addr_t         m_last_effective_address;
    bool        m_branch_taken;

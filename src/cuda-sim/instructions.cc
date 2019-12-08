@@ -589,12 +589,13 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
 
    type_info_key::type_decode(type,size,t);
 
-  std::default_random_engine generator;
-  std::uniform_int_distribution<int> fault_distribution(0, 100);
+  std::random_device rd;
+  std::mt19937 generator(rd());
+  std::uniform_real_distribution<> fault_distribution(0.0, 1.0);
   std::uniform_int_distribution<int> bit_distribution(0, 127);
-  int fault_n = fault_distribution(generator);
+  float fault_n = fault_distribution(generator);
   int bit = bit_distribution(generator);
-  bool fault = fault_n < 10;
+  bool fault = fault_n < 0.01;
 
   if (fault) {
     printf("fault generated\n");

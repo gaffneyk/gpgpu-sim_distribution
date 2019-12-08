@@ -479,6 +479,7 @@ public:
    unsigned int redundant_instructions_executed;
    unsigned int redundancy;
    std::vector<ptx_reg_t> temp_registers;
+   unsigned last_checkpoint_pc;
 
 private:
 

@@ -600,7 +600,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
   std::uniform_int_distribution<int> bit_distribution(0, 127);
   float fault_n = fault_distribution(generator);
   int bit = bit_distribution(generator);
-  bool fault = fault_n < 0.01;
+  bool fault = fault_n < 0.1;
 
   if (fault) {
     std::cout << "Fault generated" << std::endl;
@@ -724,7 +724,9 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       std::cout << "Found plurality, resolving error" << std::endl;
       faultedData = plurality;
     } else {
-      std::cout << "No plurality, could not resolve error" << std::endl;
+      std::cout << "No plurality, resuming execution from last checkpoint" << std::endl;
+      set_npc(last_checkpoint_pc);
+      read_checkpoint();
     }
   }
 

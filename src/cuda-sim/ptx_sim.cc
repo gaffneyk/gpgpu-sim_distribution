@@ -599,6 +599,7 @@ void ptx_thread_info::set_npc( const function_info *f )
 }
 
 void ptx_thread_info::write_checkpoint() {
+   last_checkpoint_pc = get_pc();
    char fname[2048];
    snprintf(fname, 2048, "checkpoint_thread_%d_%d_%d_reg.txt", m_tid.x, m_tid.y, m_tid.z);
    print_reg_thread(fname);

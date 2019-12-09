@@ -602,7 +602,7 @@ void ptx_thread_info::write_checkpoint() {
    std::cout << "Writing checkpoint at PC " << get_pc() << std::endl;
    last_checkpoint_pc = get_pc();
    char fname[2048];
-   snprintf(fname, 2048, "checkpoint_thread_%d_%d_reg.txt", m_hw_tid, m_hw_ctaid);
+   snprintf(fname, 2048, "checkpoint_thread_%d_%d_reg.txt", m_hw_tid, m_hw_wid);
    print_reg_thread(fname);
 }
 
@@ -610,7 +610,7 @@ void ptx_thread_info::read_checkpoint() {
    std::cout << "Reading checkpoint at PC " << last_checkpoint_pc << std::endl;
    char fname[2048];
    set_npc(last_checkpoint_pc);
-   snprintf(fname, 2048, "checkpoint_thread_%d_%d_reg.txt", m_hw_tid, m_hw_ctaid);
+   snprintf(fname, 2048, "checkpoint_thread_%d_%d_reg.txt", m_hw_tid, m_hw_wid);
    resume_reg_thread(fname, m_symbol_table);
 }
 

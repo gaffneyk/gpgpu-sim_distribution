@@ -727,6 +727,7 @@ void ptx_thread_info::set_operand_value( const operand_info &dst, const ptx_reg_
       std::cout << "No plurality, resuming execution from last checkpoint" << std::endl;
       set_npc(last_checkpoint_pc);
       read_checkpoint();
+      return;
     }
   }
 

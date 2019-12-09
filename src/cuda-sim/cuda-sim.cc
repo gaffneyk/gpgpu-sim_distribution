@@ -1539,8 +1539,11 @@ void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
    const ptx_instruction *pI = m_func_info->get_instruction(pc);
    
    set_npc( pc + pI->inst_size() );
-   
 
+   if (m_icount % 10 == 0) {
+      write_checkpoint();
+   }
+   
    try {
 
    clearRPC();
@@ -1741,10 +1744,6 @@ void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
       printf("GPGPU-Sim PTX: ERROR (%d) executing intruction (%s:%u)\n", x, pI->source_file(), pI->source_line() );
       printf("GPGPU-Sim PTX:       '%s'\n", pI->get_source() );
       abort();
-   }
-
-   if (m_icount % 10 == 0) {
-      write_checkpoint();
    }
 }
 

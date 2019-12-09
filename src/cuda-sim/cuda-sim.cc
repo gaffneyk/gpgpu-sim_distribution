@@ -1540,7 +1540,7 @@ void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
    
    set_npc( pc + pI->inst_size() );
 
-   if (m_icount % 10 == 0) {
+   if (m_icount % 10 == 1) {
       write_checkpoint();
    }
    
